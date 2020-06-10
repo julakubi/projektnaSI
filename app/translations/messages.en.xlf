@@ -46,6 +46,90 @@
                    <source>message_item_not_found</source>
                    <target>Item not found</target>
              </trans-unit>
-        </body>
+             <trans-unit id="action_create">
+                    <source>action_create</source>
+                    <target>Create</target>
+             </trans-unit>
+             <trans-unit id="action_delete">
+                     <source>action_delete</source>
+                     <target>Delete</target>
+              </trans-unit>
+              <trans-unit id="label_category">
+                    <source>label_category</source>
+                    <target>Category</target>
+             </trans-unit>
+             <trans-unit id="label_tag">
+                    <source>label_tag</source>
+                    <target>Tag</target>
+             </trans-unit>
+             <trans-unit id="article_edit">
+                     <source>article_edit</source>
+                     <target>Edit article</target>
+             </trans-unit>
+             <trans-unit id="action_edit">
+                       <source>action_edit</source>
+                       <target>Edit</target>
+             </trans-unit>
+             <trans-unit id="label_article">
+                       <source>label_article</source>
+                       <target>Article</target>
+             </trans-unit>
+             <trans-unit id="title_category_create">
+                       <source>title_category_create</source>
+                       <target>Create category</target>
+             </trans-unit>
+             <trans-unit id="label_category_name">
+                       <source>label_category_name</source>
+                       <target>Category name</target>
+             </trans-unit>
+             <trans-unit id="title_category_details">
+                       <source>title_category_details</source>
+                       <target>Category details</target>
+             </trans-unit>
+             <trans-unit id="title_article_create">
+                        <source>title_article_create</source>
+                        <target>Create article</target>
+              </trans-unit>
+              <trans-unit id="title_category_list">
+                        <source>title_category_list</source>
+                        <target>Category list</target>
+              </trans-unit>
+              <trans-unit id="message_created_successfully">
+                        <source>message_created_successfully</source>
+                        <target>Created successfully</target>
+              </trans-unit>
+              <trans-unit id="action_login">
+                        <source>action_login</source>
+                        <target>Log in</target>
+              </trans-unit>
+              <trans-unit id="title_tag_create">
+                        <source>title_tag_create</source>
+                        <target>Create tag</target>
+              </trans-unit>
+              <trans-unit id="message_form_error">
+                        <source>message_form_error</source>
+                        <target>Form error</target>
+              </trans-unit>
+              <trans-unit id="action_save">
+                        <source>action_save</source>
+                        <target>Save</target>
+              </trans-unit>
+              <trans-unit id="title_tag_list">
+                        <source>title_tag_list</source>
+                        <target>Tag list</target>
+              </trans-unit>
+              <trans-unit id="label_tag_name">
+                        <source>label_tag_name</source>
+                        <target>Tag name</target>
+              </trans-unit>
+              <trans-unit id="title_tag_details">
+                        <source>title_tag_details</source>
+                        <target>Tag details</target>
+              </trans-unit>
+              <trans-unit id="action_logout">
+                        <source>action_logout</source>
+                        <target>Log out</target>
+              </trans-unit>
+          </body>
     </file>
 </xliff>

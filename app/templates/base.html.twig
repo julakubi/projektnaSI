@@ -9,6 +9,50 @@
     {% endblock %}
 </head>
 <body>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="{{ url('article_index') }}" title="Artykuły">Artykuły</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ 'label_article'|trans }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('article_index') }}">{{ 'title_article_list'|trans }}</a>
+                    <a class="dropdown-item" href="{{ url('article_create') }}">{{ 'title_article_create'|trans }}</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ 'label_category'|trans }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('category_index') }}">{{ 'title_category_list'|trans }}</a>
+                    <a class="dropdown-item" href="{{ url('category_create') }}">{{ 'title_category_create'|trans }}</a>
+                </div>
+            </li>
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    {{ 'label_tag'|trans }}
+                </a>
+                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                    <a class="dropdown-item" href="{{ url('tag_index') }}">{{ 'title_tag_list'|trans }}</a>
+                    <a class="dropdown-item" href="{{ url('tag_create') }}">{{ 'title_tag_create'|trans }}</a>
+                </div>
+            </li>
+        </ul>
+        {% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+            <div class="username">{{ app.user.username }}</div><br>
+            <div>
+                <a href="{{ url('app_logout') }}">{{ 'action_logout'|trans }}</a>
+            </div>
+        {% else %}
+            <div>
+                <a href="{{ url('app_login') }}">{{ 'action_login'|trans }}</a>
+            </div>
+        {% endif %}
+    </div>
+</nav>
 <div class="container-fluid">
     {% include 'default/_flash_messages.html.twig' %}
     {% block body %}{% endblock %}

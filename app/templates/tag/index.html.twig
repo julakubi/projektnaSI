@@ -29,16 +29,9 @@
                         <a href="{{ url('tag_show', {id: tag.id}) }}" title="{{ 'action_view'|trans }}">
                             {{ 'action_view'|trans }}
                         </a>
-
-                        <a href="{{ url('tag_create') }}" title="{{ 'action_create'|trans }}">
-                            {{ 'action_create'|trans }}
-                        </a>
                         <a href="{{ url('tag_edit', {id: tag.id}) }}" title="{{ 'action_edit'|trans }}">
                             {{ 'action_edit'|trans }}
                         </a>
-
-
-
                     </td>
                 </tr>
             {% endfor %}
