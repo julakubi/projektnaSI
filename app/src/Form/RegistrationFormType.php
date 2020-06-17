@@ -23,7 +23,7 @@ class RegistrationFormType extends AbstractType
      * @param FormBuilderInterface $builder
      * @param array $options
      */
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options):void
     {
         $builder
             ->add('username')
@@ -55,6 +55,14 @@ class RegistrationFormType extends AbstractType
                 'second_options' => ['label' => 'Confirm Password'],
                 'invalid_message' => 'Your password does not match the confirmation.',
             ])
+              ->add(
+                    'userdata',
+                    UserDataType::class,
+                    [
+                        'label' => 'label_userdata',
+                        'required' => true,
+                    ]
+                )
         ;
     }
 

@@ -5,6 +5,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\UserData;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 /**
@@ -44,6 +45,11 @@ class UserFixtures extends AbstractBaseFixtures
                     'user1234'
                 )
             );
+            $userdata = new UserData();
+            $userdata->setFirstname($this->faker->firstName);
+            $userdata->setLastname($this->faker->lastName);
+            $userdata->setEmail($this->faker->email);
+            $user->setUserdata($userdata);
             return $user;
         });
 
@@ -57,6 +63,11 @@ class UserFixtures extends AbstractBaseFixtures
                     'admin1234'
                 )
             );
+            $userdata = new UserData();
+            $userdata->setFirstname($this->faker->firstName);
+            $userdata->setLastname($this->faker->lastName);
+            $userdata->setEmail($this->faker->email);
+            $user->setUserdata($userdata);
             return $user;
         });
         $manager->flush();

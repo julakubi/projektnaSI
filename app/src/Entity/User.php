@@ -82,6 +82,14 @@ class User implements UserInterface
     private $password;
 
     /**
+     * UserData.
+     *
+     * @ORM\OneToOne(targetEntity="App\Entity\UserData", inversedBy="user", cascade={"persist", "remove"})
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $userdata;
+
+    /**
      * Getter for Id.
      *
      * @return int|null Result
@@ -104,7 +112,7 @@ class User implements UserInterface
     }
 
     /**
-     * Setter fo Username.
+     * Setter for Username.
      *
      * @param string $username Username
      */
@@ -176,5 +184,25 @@ class User implements UserInterface
     {
         // If you store any temporary, sensitive data on the user, clear it here
         // $this->plainPassword = null;
+    }
+
+    /**
+     * Getter for User Data.
+     *
+     * @return UserData|null User data entity
+     */
+    public function getUserdata(): ?UserData
+    {
+        return $this->userdata;
+    }
+
+    /**
+     * Setter for User Data.
+     *
+     * @param UserData|null $userdata
+     */
+    public function setUserdata(?UserData $userdata): void
+    {
+        $this->userdata = $userdata;
     }
 }
