@@ -9,6 +9,7 @@ use App\Entity\Article;
 use App\Form\ArticleType;
 use App\Repository\ArticleRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,7 +19,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ArticleController.
  *
- * @Route("/article")
+ * @Route("/")
  */
 class ArticleController extends AbstractController
 {
@@ -87,6 +88,7 @@ class ArticleController extends AbstractController
      *     methods={"GET", "POST"},
      *     name="article_create",
      * )
+     * @IsGranted("ROLE_ADMIN")
      */
     public function create(Request $request, ArticleRepository $articleRepository): Response
     {
@@ -124,6 +126,10 @@ class ArticleController extends AbstractController
      *     methods={"GET", "PUT"},
      *     requirements={"id": "[1-9]\d*"},
      *     name="article_edit",
+     * )
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="category",
      * )
      */
     public function edit(Request $request, Article $article, ArticleRepository $articleRepository): Response
@@ -164,6 +170,10 @@ class ArticleController extends AbstractController
      *     methods={"GET", "DELETE"},
      *     requirements={"id": "[1-9]\d*"},
      *     name="article_delete",
+     * )
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="category",
      * )
      */
     public function delete(Request $request, Article $article, ArticleRepository $articleRepository): Response

@@ -8,6 +8,7 @@ use App\Entity\Tag;
 use App\Form\TagType;
 use App\Repository\TagRepository;
 use Knp\Component\Pager\PaginatorInterface;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
 use Symfony\Component\HttpFoundation\Request;
@@ -86,6 +87,7 @@ class TagController extends AbstractController
      *     methods={"GET", "POST"},
      *     name="tag_create",
      * )
+     * @IsGranted("ROLE_ADMIN")
      */
     public function create(Request $request, TagRepository $tagRepository): Response
     {
@@ -124,6 +126,10 @@ class TagController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="tag_edit",
      * )
+     * @IsGranted(
+     *     "EDIT",
+     *     subject="tag",
+     *     )
      */
     public function edit(Request $request, Tag $tag,TagRepository $tagRepository): Response
     {
@@ -164,6 +170,10 @@ class TagController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      *     name="tag_delete",
      * )
+     * @IsGranted(
+     *     "DELETE",
+     *     subject="tag",
+     *     )
      */
     public function delete(Request $request, Tag $tag, TagRepository $repository): Response
     {

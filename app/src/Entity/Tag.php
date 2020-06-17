@@ -56,8 +56,6 @@ class Tag
      * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Article[] Article
      *
      * @ORM\ManyToMany(targetEntity="App\Entity\Article", mappedBy="tags")
-     *
-     * @Assert\Type(type="Doctrine\Common\Collection\ArrayCollection")
      */
     private $articles;
 

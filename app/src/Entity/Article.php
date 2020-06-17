@@ -1,5 +1,7 @@
 <?php
-
+/**
+ * Article entity
+ */
 namespace App\Entity;
 
 use DateTimeInterface;

@@ -19,7 +19,9 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('article_index') }}">{{ 'title_article_list'|trans }}</a>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="dropdown-item" href="{{ url('article_create') }}">{{ 'title_article_create'|trans }}</a>
+                    {% endif %}
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -28,7 +30,9 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('category_index') }}">{{ 'title_category_list'|trans }}</a>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="dropdown-item" href="{{ url('category_create') }}">{{ 'title_category_create'|trans }}</a>
+                    {% endif %}
                 </div>
             </li>
             <li class="nav-item dropdown">
@@ -37,7 +41,9 @@
                 </a>
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                     <a class="dropdown-item" href="{{ url('tag_index') }}">{{ 'title_tag_list'|trans }}</a>
+                    {% if is_granted('ROLE_ADMIN') %}
                     <a class="dropdown-item" href="{{ url('tag_create') }}">{{ 'title_tag_create'|trans }}</a>
+                    {% endif %}
                 </div>
             </li>
         </ul>
@@ -47,6 +53,9 @@
                 <a href="{{ url('app_logout') }}">{{ 'action_logout'|trans }}</a>
             </div>
         {% else %}
+            <div>
+                <a href="{{ url('app_register') }}" class="btn btn-outline-primary" role="button">{{ 'action_register'|trans }}</a>
+            </div>
             <div>
                 <a href="{{ url('app_login') }}">{{ 'action_login'|trans }}</a>
             </div>
