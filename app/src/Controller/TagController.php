@@ -81,6 +81,7 @@ class TagController extends AbstractController
      *     requirements={"id": "[1-9]\d*"},
      * )
      *
+     * @IsGranted("ROLE_ADMIN"),
      */
     public function show(Tag $tag): Response
     {

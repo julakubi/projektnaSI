@@ -80,6 +80,8 @@ class CategoryController extends AbstractController
      *     name="category_show",
      *     requirements={"id": "[1-9]\d*"},
      * )
+     *
+     * @IsGranted("ROLE_ADMIN"),
      */
     public function show(Category $category): Response
     {
