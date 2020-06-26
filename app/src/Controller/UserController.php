@@ -130,9 +130,9 @@ class UserController extends AbstractController
     {
         if (!($this->security->isGranted('ROLE_ADMIN'))) {
             if ($user !== $this->getUser()) {
-                $this->addFlash('warning', 'message.forbidden');
+                $this->addFlash('warning', 'message_forbidden');
 
-                return $this->redirectToRoute('user_index');
+                return $this->redirectToRoute('article_index');
             }
         }
         $form = $this->createForm(ChangePasswordType::class, $user, ['method' => 'PUT']);
@@ -182,9 +182,9 @@ class UserController extends AbstractController
     {
         if (!($this->security->isGranted('ROLE_ADMIN'))) {
             if ($user !== $this->getUser()) {
-                $this->addFlash('warning', 'message.forbidden');
+                $this->addFlash('warning', 'message_forbidden');
 
-                return $this->redirectToRoute('user_index');
+                return $this->redirectToRoute('article_index');
             }
         }
         $userData = $user->getUserData();

@@ -314,6 +314,10 @@
                         <source>message_tag_contains_articles</source>
                         <target>Tag contains article</target>
               </trans-unit>
+             <trans-unit id="message_forbidden">
+                        <source>message_forbidden</source>
+                        <target>Forbidden</target>
+              </trans-unit>
           </body>
     </file>
 </xliff>

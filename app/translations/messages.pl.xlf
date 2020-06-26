@@ -314,6 +314,10 @@
                         <source>message_tag_contains_articles</source>
                         <target>Tag jest przypisany do artykułu. Czy na pewno chcesz usunąć?</target>
               </trans-unit>
+             <trans-unit id="message_forbidden">
+                        <source>message_forbidden</source>
+                        <target>Dostęp zabroniony</target>
+              </trans-unit>
         </body>
     </file>
 </xliff>
