@@ -2,6 +2,7 @@
 /**
  * Article security voter.
  */
+
 namespace App\Security\Voter;
 
 use App\Entity\Article;
@@ -18,14 +19,14 @@ class ArticleVoter extends Voter
     /**
      * Security helper.
      *
-     * @var \Symfony\Component\Security\Core\Security
+     * @var Security
      */
     private $security;
 
     /**
      * OrderVoter constructor.
      *
-     * @param \Symfony\Component\Security\Core\Security $security Security helper
+     * @param Security $security Security helper
      */
     public function __construct(Security $security)
     {
@@ -45,6 +46,7 @@ class ArticleVoter extends Voter
         return in_array($attribute, ['VIEW', 'EDIT', 'DELETE'])
             && $subject instanceof Article;
     }
+
     /**
      * Perform a single access check operation on a given attribute, subject and token.
      * It is safe to assume that $attribute and $subject already passed the "supports()" method check.

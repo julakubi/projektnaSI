@@ -1,7 +1,8 @@
 <?php
 /**
- * Category entity
+ * Category entity.
  */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -11,7 +12,7 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 
 /**
- * Class Category
+ * Class Category.
  *
  * @ORM\Entity(repositoryClass="App\Repository\CategoryRepository")
  * @ORM\Table(name="categories")
@@ -35,13 +36,13 @@ class Category
      *
      * @var string
      *
-     * @ORM\Column(type="string", length=45)
+     * @ORM\Column(type="string",length=45,)
      *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
      *     min="3",
-     *     max="64",
+     *     max="45",
      * )
      */
     private $categoryName;
@@ -49,15 +50,19 @@ class Category
     /**
      * Article.
      *
-     * @var \Doctrine\Common\Collections\ArrayCollection|\App\Entity\Article[] $articles Article
+     * @var ArrayCollection|Article[] Article
      *
      * @ORM\OneToMany(
      *     targetEntity="App\Entity\Article",
-     *     mappedBy="category"
+     *     mappedBy="category",
+     *     fetch="EXTRA_LAZY",
      * )
      */
     private $articles;
 
+    /**
+     * Category constructor.
+     */
     public function __construct()
     {
         $this->articles = new ArrayCollection();
@@ -86,7 +91,7 @@ class Category
     /**
      * Setter for categoryName.
      *
-     * @param string $categoryName
+     * @param string $categoryName Category
      */
     public function setCategoryName(string $categoryName): void
     {
@@ -94,24 +99,34 @@ class Category
     }
 
     /**
-     * @return Collection|Article[]
+     * Getter for Article.
+     *
+     * @return Collection|Article[] Article collection
      */
     public function getArticles(): Collection
     {
         return $this->articles;
     }
 
-    public function addArticle(Article $article): self
+    /**
+     * Add comment to collection.
+     *
+     * @param Article $article Article collection
+     */
+    public function addArticle(Article $article): void
     {
         if (!$this->articles->contains($article)) {
             $this->articles[] = $article;
             $article->setCategory($this);
         }
-
-        return $this;
     }
 
-    public function removeArticle(Article $article): self
+    /**
+     * Remove article for collection.
+     *
+     * @param Article $article Article collection
+     */
+    public function removeArticle(Article $article): void
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
@@ -120,7 +135,5 @@ class Category
                 $article->setCategory(null);
             }
         }
-
-        return $this;
     }
 }

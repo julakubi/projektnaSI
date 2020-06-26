@@ -1,4 +1,7 @@
 <?php
+/**
+ * Registration controller.
+ */
 
 namespace App\Controller;
 
@@ -12,10 +15,25 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 
+/**
+ * Class Registration Controller.
+ */
 class RegistrationController extends AbstractController
 {
     /**
-     * @Route("/register", name="app_register")
+     * Register action.
+     *
+     * @param Request                      $request         request
+     * @param UserPasswordEncoderInterface $passwordEncoder passwordEncoder
+     * @param GuardAuthenticatorHandler    $guardHandler    guardHandler
+     * @param LoginFormAuthenticator       $authenticator   authenticator
+     *
+     * @return Response HTTP response
+     *
+     * @Route(
+     *     "/register",
+     *     name="app_register",
+     * )
      */
     public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder, GuardAuthenticatorHandler $guardHandler, LoginFormAuthenticator $authenticator): Response
     {
@@ -49,8 +67,11 @@ class RegistrationController extends AbstractController
             );
         }
 
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        return $this->render(
+            'registration/register.html.twig',
+            [
+                'registrationForm' => $form->createView(),
+            ]
+        );
     }
 }

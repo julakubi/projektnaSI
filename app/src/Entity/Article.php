@@ -1,7 +1,8 @@
 <?php
 /**
- * Article entity
+ * Article entity.
  */
+
 namespace App\Entity;
 
 use DateTimeInterface;
@@ -9,10 +10,16 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
+ * Class Article.
+ *
  * @ORM\Entity(repositoryClass="App\Repository\ArticleRepository")
  * @ORM\Table(name="articles")
+ *
+ * @UniqueEntity(fields={"title"})
  */
 class Article
 {
@@ -34,6 +41,8 @@ class Article
      *
      * @ORM\Column(type="datetime")
      *
+     * @Assert\DateTime
+     *
      * @Gedmo\Timestampable(on="create")
      */
     private $createdAt;
@@ -44,6 +53,8 @@ class Article
      * @var DateTimeInterface
      *
      * @ORM\Column(type="datetime")
+     *
+     * @Assert\DateTime
      *
      * @Gedmo\Timestampable(on="update")
      */
@@ -58,18 +69,45 @@ class Article
      *     type="string",
      *     length=200,
      * )
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="200",
+     * )
      */
     private $title;
 
     /**
      * ArticleText.
      *
-     * @ORM\Column(type="text")
+     * @var string
+     *
+     * @ORM\Column(
+     *     type="text",
+     *     length=50000
+     *     )
+     *
+     * @Assert\Type("string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="50000",
+     * )
      */
     private $articleText;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Category::class, inversedBy="articles")
+     * Category.
+     *
+     * @var Category
+     *
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Entity\Category",
+     *      inversedBy="articles",
+     *     fetch="EXTRA_LAZY",
+     * )
      * @ORM\JoinColumn(nullable=false)
      */
     private $category;
@@ -82,15 +120,44 @@ class Article
      * @ORM\ManyToMany(
      *     targetEntity="App\Entity\Tag",
      *     inversedBy="articles",
-     *     orphanRemoval=true
+     *     orphanRemoval=false,
+     *     fetch="EXTRA_LAZY",
      *     )
      * @ORM\JoinTable(name="articles_tags")
      */
     private $tags;
 
+    /**
+     * Comment.
+     *
+     * @var Comment
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment",
+     *      mappedBy="article",
+     *      orphanRemoval=true,
+     *     )
+     */
+    private $comment;
+
+    /**
+     * Author.
+     *
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="App\Entity\User",
+     *     fetch="EXTRA_LAZY",
+     *     )
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $author;
+
+    /**
+     * Article constructor.
+     */
     public function __construct()
     {
         $this->tags = new ArrayCollection();
+        $this->comment = new ArrayCollection();
     }
 
     /**
@@ -106,7 +173,7 @@ class Article
     /**
      * Getter for Created At.
      *
-     * @return \DateTimeInterface|null Created at
+     * @return DateTimeInterface|null Created at
      */
     public function getCreatedAt(): ?DateTimeInterface
     {
@@ -116,7 +183,7 @@ class Article
     /**
      * Setter for Created at.
      *
-     * @param \DateTimeInterface $createdAt Created at
+     * @param DateTimeInterface $createdAt Created at
      */
     public function setCreatedAt(DateTimeInterface $createdAt): void
     {
@@ -126,7 +193,7 @@ class Article
     /**
      * Getter for Modified at.
      *
-     * @return \DateTimeInterface|null Modified at
+     * @return DateTimeInterface|null Modified at
      */
     public function getModifiedAt(): ?DateTimeInterface
     {
@@ -136,7 +203,7 @@ class Article
     /**
      * Setter for Modified at.
      *
-     * @param \DateTimeInterface $modifiedAt Modified at
+     * @param DateTimeInterface $modifiedAt Modified at
      */
     public function setModifiedAt(DateTimeInterface $modifiedAt): void
     {
@@ -202,15 +269,17 @@ class Article
     {
         $this->category = $category;
     }
+
     /**
      * Getter for tags.
      *
-     * @return \Doctrine\Common\Collections\Collection|\App\Entity\Tag[] Tags collection
+     * @return Collection|Tag[] Tags collection
      */
     public function getTags(): Collection
     {
         return $this->tags;
     }
+
     /**
      * Add tag to collection.
      *
@@ -222,6 +291,7 @@ class Article
             $this->tags[] = $tag;
         }
     }
+
     /**
      * Remove tag from collection.
      *
@@ -232,5 +302,64 @@ class Article
         if ($this->tags->contains($tag)) {
             $this->tags->removeElement($tag);
         }
+    }
+
+    /**
+     * Getter for Comment.
+     *
+     * @return Collection|Comment[] Comment collection
+     */
+    public function getComment(): Collection
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Add comment to collection.
+     *
+     * @param Comment $comment Comment collection
+     */
+    public function addComment(Comment $comment): void
+    {
+        if (!$this->comment->contains($comment)) {
+            $this->comment[] = $comment;
+            $comment->setArticle($this);
+        }
+    }
+
+    /**
+     * Remove comment for collection.
+     *
+     * @param Comment $comment Comment collection
+     */
+    public function removeComment(Comment $comment): void
+    {
+        if ($this->comment->contains($comment)) {
+            $this->comment->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getArticle() === $this) {
+                $comment->setArticle(null);
+            }
+        }
+    }
+
+    /**
+     * Getter for Author.
+     *
+     * @return User|null User
+     */
+    public function getAuthor(): ?User
+    {
+        return $this->author;
+    }
+
+    /**
+     * Setter for Author.
+     *
+     * @param User|null $author User
+     */
+    public function setAuthor(?User $author): void
+    {
+        $this->author = $author;
     }
 }

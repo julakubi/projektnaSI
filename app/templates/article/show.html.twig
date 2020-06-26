@@ -16,6 +16,8 @@
             <dd>{{ article.modifiedAt|format_date('long') }}</dd>
             <dt>{{ 'label_category'|trans }}</dt>
             <dd>{{  article.category.categoryName }}</dd>
+            <dt>{{ 'label_author'|trans }}</dt>
+            <dd>{{  article.author.userName }}</dd>
             <dt>{{ 'label_title'|trans }}</dt>
             <dd>{{ article.title }}</dd>
             <dt>{{ 'label_artcicle_text'|trans }}</dt>
@@ -26,6 +28,46 @@
                 {{ 'action_back_to_list'|trans }}
             </a>
         </p>
+        <dt>{{ 'title_comment_list'|trans  }}
+            {% if is_granted("ROLE_USER") %}
+            <a href="{{ url('comment_create', {id: article.id}) }}" title="{{ 'comment_create'|trans }}">
+                {{ 'comment_create'|trans }}
+            </a>
+            {% endif %}
+        </dt>
+        <dd>
+            <ul class="list-group-flush" >
+
+                {% for comment in article.comment %}
+                    <li class="list-group-item">
+
+                        <div class="date">
+                            {{ comment.createdAt|date('Y/m/d') }} | <b>{{ comment.user.username }}</b>
+                        </div>
+                        <div class="comment">
+                            {{ comment.content }}<br>
+                        </div>
+                        {% if is_granted("ROLE_ADMIN") or is_granted('EDIT', comment) %}
+                            <div>
+                                <a href="{{ url('comment_edit', {id: comment.id}) }}" title="{{ 'comment_edit'|trans }}"> {{ 'comment_edit'|trans }}</a>
+
+                            </div>
+                        {% endif %}
+                        {% if is_granted("ROLE_ADMIN") or is_granted('DELETE', comment) %}
+                            <div>
+                                <a href="{{ url('comment_delete', {id: comment.id}) }}" title="{{ 'comment_delete'|trans }}"> {{ 'comment_delete'|trans }} </a>
+
+                            </div>
+                        {% endif %}
+                    </li>
+                {% endfor %}
+
+            </ul>
+
+        </dd>
+
+
+
     {% else %}
         <p>
             {{ 'message_item_not_found'|trans }}

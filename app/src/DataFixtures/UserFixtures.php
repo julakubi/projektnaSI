@@ -2,12 +2,14 @@
 /**
  * User fixtures.
  */
+
 namespace App\DataFixtures;
 
 use App\Entity\User;
 use App\Entity\UserData;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
 /**
  * Class UserFixtures.
  */
@@ -16,22 +18,24 @@ class UserFixtures extends AbstractBaseFixtures
     /**
      * Password encoder.
      *
-     * @var \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface
+     * @var UserPasswordEncoderInterface
      */
     private $passwordEncoder;
+
     /**
      * UserFixtures constructor.
      *
-     * @param \Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface $passwordEncoder Password encoder
+     * @param UserPasswordEncoderInterface $passwordEncoder Password encoder
      */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
+
     /**
      * Load data.
      *
-     * @param \Doctrine\Persistence\ObjectManager $manager Persistence object manager
+     * @param ObjectManager $manager Persistence object manager
      */
     public function loadData(ObjectManager $manager): void
     {
@@ -50,6 +54,7 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata->setLastname($this->faker->lastName);
             $userdata->setEmail($this->faker->email);
             $user->setUserdata($userdata);
+
             return $user;
         });
 
@@ -68,6 +73,7 @@ class UserFixtures extends AbstractBaseFixtures
             $userdata->setLastname($this->faker->lastName);
             $userdata->setEmail($this->faker->email);
             $user->setUserdata($userdata);
+
             return $user;
         });
         $manager->flush();

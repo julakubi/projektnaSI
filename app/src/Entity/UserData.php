@@ -2,10 +2,12 @@
 /**
  * UserData Entity.
  */
+
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserDataRepository")
@@ -39,6 +41,13 @@ class UserData
      * @ORM\Column(type="string",
      *      length=45,
      *     )
+     *
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="2",
+     *     max="45",
+     * )
      */
     private $firstname;
 
@@ -50,6 +59,13 @@ class UserData
      * @ORM\Column(type="string",
      *      length=45,
      *     )
+     *
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="45",
+     * )
      */
     private $lastname;
 
@@ -62,6 +78,13 @@ class UserData
      *      length=180,
      *      unique=true
      *     )
+     *
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="5",
+     *     max="180",
+     * )
      */
     private $email;
 
@@ -160,11 +183,5 @@ class UserData
     public function setUser(?User $user): void
     {
         $this->user = $user;
-
-        // set (or unset) the owning side of the relation if necessary
-//        $newUserdata = null === $user ? null : $this;
-//        if ($user->getUserdata() !== $newUserdata) {
-//            $user->setUserdata($newUserdata);
-//        }
     }
 }

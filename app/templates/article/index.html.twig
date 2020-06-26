@@ -20,7 +20,7 @@
                 <th>{{ knp_pagination_sortable(pagination, 'label_modified_at'|trans, 'article.modifiedAt') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_title'|trans, 'article.title') }}</th>
                 <th>{{ knp_pagination_sortable(pagination, 'label_category'|trans, 'category.categoryName') }}</th>
-                <th>{{ knp_pagination_sortable(pagination, 'label_tag'|trans, 'category.tagName') }}</th>
+                <th>{{ 'label_tag'|trans }}</th>
                 <th>{{ 'label_actions'|trans }}</th>
             </tr>
             </thead>
@@ -31,11 +31,18 @@
                     <td>{{ article.createdAt|format_date('long') }}</td>
                     <td>{{ article.modifiedAt|format_date('long') }}</td>
                     <td>{{ article.title }}</td>
-                    <td>{{ article.category.categoryName }}</td>
+                    <td><a href="{{ url('article_index', {'filters' : {'category' : article.category.id}}) }}" title="{{ article.category.categoryName }}">
+                            {{ article.category.categoryName}}
+                        </a></td>
                     <td>
-                        {% for tag in article.getTags()  %}
-                            {{ tag.tagName }}
-                        {% endfor %}
+                        {% if article.tags is defined and article.tags|length %}
+                            {% for tag in article.tags %}
+                                <a href="{{ url('article_index', {'filters' : {'tag' : tag.id}}) }}" title="{{ tag.tagName }}">
+                                    {{ tag.tagName }}
+                                </a>
+                            {% endfor %}
+                        {% else %}
+                        {% endif %}
                     </td>
                     <td>
                         <a href="{{ url('article_show', {id: article.id}) }}" title="{{ 'action_view'|trans }}">

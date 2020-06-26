@@ -1,13 +1,15 @@
 <?php
 /**
- * RegistrationForm Type.
+ * Registration type.
  */
+
 namespace App\Form;
 
 use App\Entity\User;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
+use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
@@ -19,14 +21,22 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 class RegistrationFormType extends AbstractType
 {
     /**
-     * Build form.
-     * @param FormBuilderInterface $builder
-     * @param array $options
+     * Builder form.
+     *
+     * @param FormBuilderInterface $builder Form Builder Interface
+     * @param array                $options Array
      */
-    public function buildForm(FormBuilderInterface $builder, array $options):void
+    public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('username')
+            ->add(
+                'username',
+                TextType::class,
+                [
+                    'label' => 'label_username',
+                    'required' => true,
+                ]
+            )
 //            ->add('agreeTerms', CheckboxType::class, [
 //                'mapped' => false,
 //                'constraints' => [
@@ -35,41 +45,49 @@ class RegistrationFormType extends AbstractType
 //                    ]),
 //                ],
 //            ])
-            ->add('password', RepeatedType::class, [
-                // instead of being set onto the object directly,
-                // this is read and encoded in the controller
-                'type' => PasswordType::class,
-                'mapped' => false,
-                'constraints' => [
-                    new NotBlank([
-                        'message' => 'Please enter a password',
-                    ]),
-                    new Length([
-                        'min' => 6,
-                        'minMessage' => 'Your password should be at least {{ limit }} characters',
-                        // max length allowed by Symfony for security reasons
-                        'max' => 4096,
-                    ]),
-                ],
-                'first_options' => ['label' => 'Password'],
-                'second_options' => ['label' => 'Confirm Password'],
-                'invalid_message' => 'Your password does not match the confirmation.',
-            ])
-              ->add(
-                    'userdata',
-                    UserDataType::class,
-                    [
-                        'label' => 'label_userdata',
-                        'required' => true,
-                    ]
-                )
-        ;
+            ->add(
+                'password',
+                RepeatedType::class,
+                [
+                    // instead of being set onto the object directly,
+                    // this is read and encoded in the controller
+                    'type' => PasswordType::class,
+                    'required' => true,
+                    'mapped' => false,
+                    'constraints' => [
+                        new NotBlank(),
+                        new Length(
+                            [
+                                'min' => 6,
+                                'max' => 255,
+                            ]
+                        ),
+                    ],
+                    'first_options' => ['label' => 'label_password'],
+                    'second_options' => ['label' => 'label_confirm'],
+                ]
+            )
+            ->add(
+                'userdata',
+                UserDataType::class,
+                [
+                    'label' => false,
+                    'required' => true,
+                ]
+            );
     }
 
+    /**
+     * Configure options.
+     *
+     * @param OptionsResolver $resolver Options Resolver
+     */
     public function configureOptions(OptionsResolver $resolver)
     {
-        $resolver->setDefaults([
-            'data_class' => User::class,
-        ]);
+        $resolver->setDefaults(
+            [
+                'data_class' => User::class,
+            ]
+        );
     }
 }

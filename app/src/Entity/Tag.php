@@ -2,6 +2,7 @@
 /**
  * Tag entity.
  */
+
 namespace App\Entity;
 
 use Doctrine\Common\Collections\ArrayCollection;
@@ -38,7 +39,7 @@ class Tag
      *
      * @ORM\Column(
      *     type="string",
-     *      length=45
+     *      length=45,
      *     )
      *
      * @Assert\Type(type="string")

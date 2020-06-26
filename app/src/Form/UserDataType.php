@@ -2,10 +2,12 @@
 /**
  * UserData type.
  */
+
 namespace App\Form;
 
 use App\Entity\UserData;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -23,8 +25,8 @@ class UserDataType extends AbstractType
      *
      * @see FormTypeExtensionInterface::buildForm()
      *
-     * @param \Symfony\Component\Form\FormBuilderInterface $builder The form builder
-     * @param array                                        $options The options
+     * @param FormBuilderInterface $builder The form builder
+     * @param array                $options The options
      */
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -35,7 +37,8 @@ class UserDataType extends AbstractType
                 'label' => 'label_firstname',
                 'required' => true,
                 'attr' => ['max_length' => 45],
-                ]);
+            ]
+        );
         $builder->add(
             'lastname',
             TextType::class,
@@ -43,20 +46,23 @@ class UserDataType extends AbstractType
                 'label' => 'label_lastname',
                 'required' => true,
                 'attr' => ['max_length' => 45],
-                ]);
+            ]
+        );
         $builder->add(
             'email',
-            TextType::class,
+            EmailType::class,
             [
                 'label' => 'label_email',
                 'required' => true,
                 'attr' => ['max_length' => 180],
-                ]);
+            ]
+        );
     }
+
     /**
      * Configures the options for this type.
      *
-     * @param \Symfony\Component\OptionsResolver\OptionsResolver $resolver The resolver for the options
+     * @param OptionsResolver $resolver The resolver for the options
      */
     public function configureOptions(OptionsResolver $resolver): void
     {

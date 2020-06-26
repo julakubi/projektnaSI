@@ -7,8 +7,9 @@ namespace App\Controller;
 
 use App\Entity\Article;
 use App\Form\ArticleType;
-use App\Repository\ArticleRepository;
-use Knp\Component\Pager\PaginatorInterface;
+use App\Service\ArticleService;
+use Doctrine\ORM\OptimisticLockException;
+use Doctrine\ORM\ORMException;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Form\Extension\Core\Type\FormType;
@@ -24,13 +25,28 @@ use Symfony\Component\Routing\Annotation\Route;
 class ArticleController extends AbstractController
 {
     /**
+     * Article service.
+     *
+     * @var ArticleService
+     */
+    private $articleService;
+
+    /**
+     * ArticleController constructor.
+     *
+     * @param ArticleService $articleService Article service
+     */
+    public function __construct(ArticleService $articleService)
+    {
+        $this->articleService = $articleService;
+    }
+
+    /**
      * Index action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Repository\ArticleRepository $articleRepository Article repository
-     * @param \Knp\Component\Pager\PaginatorInterface $paginator Paginator
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/",
@@ -38,12 +54,11 @@ class ArticleController extends AbstractController
      *     name="article_index",
      * )
      */
-    public function index(Request $request, ArticleRepository $articleRepository, PaginatorInterface $paginator): Response
+    public function index(Request $request): Response
     {
-        $pagination = $paginator->paginate(
-            $articleRepository->queryAll(),
+        $pagination = $this->articleService->createPaginatedList(
             $request->query->getInt('page', 1),
-            ArticleRepository::PAGINATOR_ITEMS_PER_PAGE
+            $request->query->getAlnum('filters', [])
         );
 
         return $this->render(
@@ -51,12 +66,13 @@ class ArticleController extends AbstractController
             ['pagination' => $pagination]
         );
     }
+
     /**
      * Show action.
      *
-     * @param \App\Entity\Article $article Article entity
+     * @param Article $article Article entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
      * @Route(
      *     "/{id}",
@@ -72,16 +88,16 @@ class ArticleController extends AbstractController
             ['article' => $article]
         );
     }
+
     /**
      * Create action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Repository\ArticleRepository $articleRepository Article repository
+     * @param Request $request HTTP request
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      *
      * @Route(
      *     "/create",
@@ -90,14 +106,15 @@ class ArticleController extends AbstractController
      * )
      * @IsGranted("ROLE_ADMIN")
      */
-    public function create(Request $request, ArticleRepository $articleRepository): Response
+    public function create(Request $request): Response
     {
         $article = new Article();
         $form = $this->createForm(ArticleType::class, $article);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $articleRepository->save($article);
+            $article->setAuthor($this->getUser());
+            $this->articleService->save($article);
             $this->addFlash('success', 'message_created_successfully');
 
             return $this->redirectToRoute('article_index');
@@ -112,14 +129,13 @@ class ArticleController extends AbstractController
     /**
      * Edit action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request        HTTP request
-     * @param \App\Entity\Article                          $article           Article entity
-     * @param \App\Repository\ArticleRepository           $articleRepository Article repository
+     * @param Request $request HTTP request
+     * @param Article $article Article entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      *
      * @Route(
      *     "/{id}/edit",
@@ -129,16 +145,16 @@ class ArticleController extends AbstractController
      * )
      * @IsGranted(
      *     "EDIT",
-     *     subject="category",
+     *     subject="article",
      * )
      */
-    public function edit(Request $request, Article $article, ArticleRepository $articleRepository): Response
+    public function edit(Request $request, Article $article): Response
     {
         $form = $this->createForm(ArticleType::class, $article, ['method' => 'PUT']);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $articleRepository->save($article);
+            $this->articleService->save($article);
             $this->addFlash('success', 'message_updated_successfully');
 
             return $this->redirectToRoute('article_index');
@@ -156,14 +172,13 @@ class ArticleController extends AbstractController
     /**
      * Delete action.
      *
-     * @param \Symfony\Component\HttpFoundation\Request $request HTTP request
-     * @param \App\Entity\Article $article Article entity
-     * @param \App\Repository\ArticleRepository $articleRepository Article repository
+     * @param Request $request HTTP request
+     * @param Article $article Article entity
      *
-     * @return \Symfony\Component\HttpFoundation\Response HTTP response
+     * @return Response HTTP response
      *
-     * @throws \Doctrine\ORM\ORMException
-     * @throws \Doctrine\ORM\OptimisticLockException
+     * @throws ORMException
+     * @throws OptimisticLockException
      *
      * @Route(
      *     "/{id}/delete",
@@ -173,10 +188,10 @@ class ArticleController extends AbstractController
      * )
      * @IsGranted(
      *     "DELETE",
-     *     subject="category",
+     *     subject="article",
      * )
      */
-    public function delete(Request $request, Article $article, ArticleRepository $articleRepository): Response
+    public function delete(Request $request, Article $article): Response
     {
         $form = $this->createForm(FormType::class, $article, ['method' => 'DELETE']);
         $form->handleRequest($request);
@@ -186,7 +201,7 @@ class ArticleController extends AbstractController
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $articleRepository->delete($article);
+            $this->articleService->delete($article);
             $this->addFlash('success', 'message_deleted_successfully');
 
             return $this->redirectToRoute('article_index');

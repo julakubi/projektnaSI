@@ -2,11 +2,15 @@
 /**
  * User entity.
  */
+
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\UserInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
@@ -23,7 +27,6 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class User implements UserInterface
 {
-
     /**
      * Role user.
      *
@@ -62,6 +65,13 @@ class User implements UserInterface
      *      length=180,
      *      unique=true
      *     )
+     *
+     * @Assert\Type(type="string")
+     * @Assert\NotBlank
+     * @Assert\Length(
+     *     min="3",
+     *     max="180",
+     * )
      */
     private $username;
 
@@ -77,6 +87,13 @@ class User implements UserInterface
      *
      * @var string
      *
+     * @Assert\Type(type="string")
+     *
+     * @Assert\Length(
+     *   min = 6,
+     *   max = 200
+     * )
+     *
      * @ORM\Column(type="string")
      */
     private $password;
@@ -88,6 +105,21 @@ class User implements UserInterface
      * @ORM\JoinColumn(nullable=false)
      */
     private $userdata;
+
+    /**
+     * Comment.
+     *
+     * @ORM\OneToMany(targetEntity="App\Entity\Comment", mappedBy="user", orphanRemoval=true)
+     */
+    private $comment;
+
+    /**
+     * User constructor.
+     */
+    public function __construct()
+    {
+        $this->comment = new ArrayCollection();
+    }
 
     /**
      * Getter for Id.
@@ -197,12 +229,51 @@ class User implements UserInterface
     }
 
     /**
-     * Setter for User Data.
+     * Setter for UserData.
      *
-     * @param UserData|null $userdata
+     * @param UserData|null $userdata User data entity
      */
     public function setUserdata(?UserData $userdata): void
     {
         $this->userdata = $userdata;
+    }
+
+    /**
+     * Getter for Comment.
+     *
+     * @return Collection|Comment[] Comment collection
+     */
+    public function getComment(): Collection
+    {
+        return $this->comment;
+    }
+
+    /**
+     * Add comment to collection.
+     *
+     * @param Comment $comment Comment collection
+     */
+    public function addComment(Comment $comment): void
+    {
+        if (!$this->comment->contains($comment)) {
+            $this->comment[] = $comment;
+            $comment->setUser($this);
+        }
+    }
+
+    /**
+     * Remove comment for collection.
+     *
+     * @param Comment $comment Comment collection
+     */
+    public function removeComment(Comment $comment): void
+    {
+        if ($this->comment->contains($comment)) {
+            $this->comment->removeElement($comment);
+            // set the owning side to null (unless already changed)
+            if ($comment->getUser() === $this) {
+                $comment->setUser(null);
+            }
+        }
     }
 }

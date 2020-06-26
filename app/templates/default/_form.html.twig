@@ -40,6 +40,13 @@
             </a>
         </div>
     {% endif %}
+    {% if back_to_element_path|default(false) %}
+        <div class="form-group row float-sm-left">
+            <a href="{{ (back_to_element_path) }}" class="btn btn-link">
+                {{ 'action_back_to_element'|trans }}
+            </a>
+        </div>
+    {% endif %}
     {{ form_end(form) }}
 
 {% endblock %}
