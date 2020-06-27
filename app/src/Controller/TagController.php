@@ -204,8 +204,6 @@ class TagController extends AbstractController
 
         if ($tag->getArticles()->count() && !($form->isSubmitted() && $form->isValid())) {
             $this->addFlash('warning', 'message_tag_contains_articles');
-//
-//            return $this->redirectToRoute('tag_index');
         }
 
         if ($request->isMethod('DELETE') && !$form->isSubmitted()) {

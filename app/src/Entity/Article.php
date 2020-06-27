@@ -336,7 +336,6 @@ class Article
     {
         if ($this->comment->contains($comment)) {
             $this->comment->removeElement($comment);
-            // set the owning side to null (unless already changed)
             if ($comment->getArticle() === $this) {
                 $comment->setArticle(null);
             }

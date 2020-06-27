@@ -47,6 +47,8 @@ class Comment
      *
      * @ORM\Column(type="string", length=255)
      *
+     * @var string
+     *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
      * @Assert\Length(
@@ -59,6 +61,8 @@ class Comment
     /**
      * User.
      *
+     * @var User
+     *
      * @ORM\ManyToOne(
      *     targetEntity="App\Entity\User",
      *      inversedBy="comment"
@@ -68,6 +72,10 @@ class Comment
     private $user;
 
     /**
+     * Article.
+     *
+     * @var Article
+     *
      * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comment")
      * @ORM\JoinColumn(nullable=false)
      */

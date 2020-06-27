@@ -130,7 +130,6 @@ class Category
     {
         if ($this->articles->contains($article)) {
             $this->articles->removeElement($article);
-            // set the owning side to null (unless already changed)
             if ($article->getCategory() === $this) {
                 $article->setCategory(null);
             }

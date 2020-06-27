@@ -81,6 +81,7 @@ class UserData
      *
      * @Assert\Type(type="string")
      * @Assert\NotBlank
+     * @Assert\Email()
      * @Assert\Length(
      *     min="5",
      *     max="180",
