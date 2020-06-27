@@ -45,7 +45,10 @@ class Comment
     /**
      * Content.
      *
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(
+     *     type="string",
+     *      length=255
+     *     )
      *
      * @var string
      *
@@ -76,7 +79,10 @@ class Comment
      *
      * @var Article
      *
-     * @ORM\ManyToOne(targetEntity="App\Entity\Article", inversedBy="comment")
+     * @ORM\ManyToOne(
+     *     targetEntity="App\Entity\Article",
+     *      inversedBy="comment"
+     * )
      * @ORM\JoinColumn(nullable=false)
      */
     private $article;
